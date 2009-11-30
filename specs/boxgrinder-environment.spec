@@ -49,6 +49,9 @@ rm -Rf $RPM_BUILD_ROOT
 /usr/sbin/useradd -m -p '$1$LxTRJ/$WIyjiQ5521QRECVt9Ded90' boxgrinder
 /bin/chown boxgrinder:boxgrinder /opt/%{name} -R
 
+/bin/echo "mkdir /mnt/boxgrinder" >> /etc/rc.local
+/bin/echo "chown boxgrinder:boxgrinder /mnt/boxgrinder" >> /etc/rc.local
+
 patch -s /etc/sudoers < /opt/%{name}/patches/%{name}-sudo-user.patch
 
 /bin/echo "### BoxGrinder vars, do not modify these lines! ###" >> /home/boxgrinder/.bashrc
