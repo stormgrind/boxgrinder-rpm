@@ -9,9 +9,13 @@ BuildArch:      noarch
 Group:          Applications/System
 Source0:        http://www.apache.org/dist/maven/binaries/apache-maven-2.2.1-bin.tar.gz
 Source1:        %{name}-sudo-user.patch
+Source2:        http://rubyforge.org/frs/download.php/52464/xml-simple-1.0.12.gem
+Source3:        http://rubyforge.org/frs/download.php/52548/mime-types-1.16.gem
+Source4:        http://rubyforge.org/frs/download.php/21724/builder-2.1.2.gem
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires:       shadow-utils
 Requires:       git
+Requires:       rubygems
 
 %description
 BoxGrinder environment. Required tools and source code for building appliances.
@@ -25,6 +29,12 @@ rm -Rf $RPM_BUILD_ROOT
 install -d -m 755 $RPM_BUILD_ROOT/opt/%{name}/tools/apache-maven-%{maven_version}
 install -d -m 755 $RPM_BUILD_ROOT/opt/%{name}/patches
 
+install -d -m 755 $RPM_BUILD_ROOT/usr/share/%{name}-gems
+
+cp %{SOURCE2} $RPM_BUILD_ROOT/usr/share/%{name}-gems
+cp %{SOURCE3} $RPM_BUILD_ROOT/usr/share/%{name}-gems
+cp %{SOURCE4} $RPM_BUILD_ROOT/usr/share/%{name}-gems
+
 cp -R * $RPM_BUILD_ROOT/opt/%{name}/tools/apache-maven-%{maven_version}
 cp %{SOURCE1} $RPM_BUILD_ROOT/opt/%{name}/patches/
 
@@ -32,6 +42,9 @@ cp %{SOURCE1} $RPM_BUILD_ROOT/opt/%{name}/patches/
 rm -Rf $RPM_BUILD_ROOT
 
 %post
+/usr/bin/gem install -q /usr/share/%{name}-gems/xml-simple-1.0.12.gem
+/usr/bin/gem install -q /usr/share/%{name}-gems/builder-2.1.2.gem
+/usr/bin/gem install -q /usr/share/%{name}-gems/mime-types-1.16.gem
 
 /usr/sbin/useradd -m -p '$1$LxTRJ/$WIyjiQ5521QRECVt9Ded90' boxgrinder
 /bin/chown boxgrinder:boxgrinder /opt/%{name} -R
