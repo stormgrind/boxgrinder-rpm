@@ -4,6 +4,6 @@
  ## Allows members of the users group to shutdown this system
  # %users  localhost=/sbin/shutdown -h now
  
-+oddthesis ALL = NOPASSWD: ALL
-+Defaults:oddthesis env_keep+="PYTHONUNBUFFERED"
++boxgrinder ALL = NOPASSWD: ALL
++Defaults:boxgrinder env_keep+="PYTHONUNBUFFERED"
 +
