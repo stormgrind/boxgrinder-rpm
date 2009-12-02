@@ -51,6 +51,7 @@ rm -Rf $RPM_BUILD_ROOT
 
 /bin/echo "mkdir /mnt/boxgrinder" >> /etc/rc.local
 /bin/echo "chown boxgrinder:boxgrinder /mnt/boxgrinder" >> /etc/rc.local
+/bin/echo "options loop max_loop=64" >> /etc/modprobe.d/loop.conf
 
 patch -s /etc/sudoers < /opt/%{name}/patches/%{name}-sudo-user.patch
 
