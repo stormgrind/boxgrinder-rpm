@@ -20,7 +20,7 @@ Requires: rubygem(amazon-ec2) >= 0.9.6
 Requires: rubygem(net-sftp) >= 2.0.4
 Requires: rubygem(net-ssh) >= 2.0.20
 Requires: rubygem(rake) >= 0.8.7
-Requires: gcc, gcc-c++, make, rubygem-rake, wget, rpmdevtools, java-1.6.0-openjdk-devel, autoconf, expect, appliance-tools, sudo, libguestfs, ruby-libguestfs, guestfish, zlib-devel, SDL-devel, boxgrinder-environment
+Requires: gcc, gcc-c++, make, rubygem-rake, wget, rpmdevtools, java-1.6.0-openjdk-devel, autoconf, expect, appliance-tools, sudo, libguestfs, ruby-libguestfs, guestfish, zlib-devel, SDL-devel, boxgrinder-environment, yum-utils
 BuildRequires: rubygems
 BuildArch: noarch
 Provides: rubygem(%{gemname}) = %{version}
