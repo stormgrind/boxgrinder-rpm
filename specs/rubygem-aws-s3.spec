@@ -1,6 +1,7 @@
 # Generated from aws-s3-0.6.2.gem by gem2rpm -*- rpm-spec -*-
-%define ruby_sitelib %(ruby -rrbconfig -e "puts Config::CONFIG['sitelibdir']")
-%define gemdir %(ruby -rubygems -e 'puts Gem::dir' 2>/dev/null)
+%define ruby_version 1.8
+%define ruby_sitelib /usr/lib/ruby/site_ruby/%{ruby_version}
+%define gemdir /usr/lib/ruby/gems/%{ruby_version}
 %define gemname aws-s3
 %define geminstdir %{gemdir}/gems/%{gemname}-%{version}
 
@@ -23,7 +24,6 @@ Provides: rubygem(%{gemname}) = %{version}
 
 %description
 Client library for Amazon's Simple Storage Service's REST API
-
 
 %prep
 

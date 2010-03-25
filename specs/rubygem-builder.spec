@@ -1,6 +1,6 @@
-# Generated from builder-2.1.2.gem by gem2rpm -*- rpm-spec -*-
-%define ruby_sitelib %(ruby -rrbconfig -e "puts Config::CONFIG['sitelibdir']")
-%define gemdir %(ruby -rubygems -e 'puts Gem::dir' 2>/dev/null)
+%define ruby_version 1.8
+%define ruby_sitelib /usr/lib/ruby/site_ruby/%{ruby_version}
+%define gemdir /usr/lib/ruby/gems/%{ruby_version}
 %define gemname builder
 %define geminstdir %{gemdir}/gems/%{gemname}-%{version}
 

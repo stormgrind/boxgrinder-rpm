@@ -1,17 +1,18 @@
 # Generated from amazon-ec2-0.9.7.gem by gem2rpm -*- rpm-spec -*-
-%define ruby_sitelib %(ruby -rrbconfig -e "puts Config::CONFIG['sitelibdir']")
-%define gemdir %(ruby -rubygems -e 'puts Gem::dir' 2>/dev/null)
+%define ruby_version 1.8
+%define ruby_sitelib /usr/lib/ruby/site_ruby/%{ruby_version}
+%define gemdir /usr/lib/ruby/gems/%{ruby_version}
 %define gemname amazon-ec2
 %define geminstdir %{gemdir}/gems/%{gemname}-%{version}
 
 Summary: Amazon EC2 Ruby Gem
 Name: rubygem-%{gemname}
-Version: 0.9.7
+Version: 0.9.9
 Release: 1%{?dist}
 Group: Development/Languages
 License: GPLv2+ or Ruby
 URL: http://github.com/grempe/amazon-ec2
-Source0: http://rubygems.org/gems/%{gemname}-%{version}.gem
+Source0: http://rubygems.org/downloads/%{gemname}-%{version}.gem
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires: rubygems
 Requires: rubygem(xml-simple) >= 1.0.12
@@ -62,6 +63,9 @@ rm -rf %{buildroot}
 
 
 %changelog
-* Wed Mar 17 2010 Marek <goldmann@mistress.local> - 0.9.7-1
+* Wed Mar 25 2010 Marek <marek.goldmann@gmail.com> - 0.9.9-1
+- Upgrade to upstream 0.9.9
+
+* Wed Mar 17 2010 Marek <marek.goldmann@gmail.com> - 0.9.7-1
 - Initial package
 

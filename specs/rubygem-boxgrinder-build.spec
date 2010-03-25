@@ -1,6 +1,6 @@
-# Generated from boxgrinder-build-0.0.1.gem by gem2rpm -*- rpm-spec -*-
-%define ruby_sitelib %(ruby -rrbconfig -e "puts Config::CONFIG['sitelibdir']")
-%define gemdir %(ruby -rubygems -e 'puts Gem::dir' 2>/dev/null)
+%define ruby_version 1.8
+%define ruby_sitelib /usr/lib/ruby/site_ruby/%{ruby_version}
+%define gemdir /usr/lib/ruby/gems/%{ruby_version}
 %define gemname boxgrinder-build
 %define geminstdir %{gemdir}/gems/%{gemname}-%{version}
 
@@ -20,7 +20,7 @@ Requires: rubygem(amazon-ec2) >= 0.9.6
 Requires: rubygem(net-sftp) >= 2.0.4
 Requires: rubygem(net-ssh) >= 2.0.20
 Requires: rubygem(rake) >= 0.8.7
-Requires: gcc, gcc-c++, make, rubygem-rake, wget, rpmdevtools, java-1.6.0-openjdk-devel, autoconf, expect, appliance-tools, sudo, libguestfs, ruby-libguestfs, guestfish, zlib-devel, SDL-devel, boxgrinder-environment, yum-utils
+Requires: gcc, gcc-c++, make, rubygem-rake, wget, rpmdevtools, java-1.6.0-openjdk-devel, autoconf, expect, appliance-tools, sudo, libguestfs, ruby-libguestfs, guestfish, zlib-devel, SDL-devel, boxgrinder-environment, yum-utils, qemu-stable
 BuildRequires: rubygems
 BuildArch: noarch
 Provides: rubygem(%{gemname}) = %{version}
