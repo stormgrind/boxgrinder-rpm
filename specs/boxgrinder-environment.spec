@@ -40,7 +40,7 @@ rm -Rf $RPM_BUILD_ROOT
 /bin/echo "export JAVA_HOME=/usr/lib/jvm/java-openjdk" >> /home/boxgrinder/.bashrc
 
 /bin/echo -e "boxgrinder    ALL=(ALL)       NOPASSWD: ALL\nDefaults:boxgrinder env_keep+=\"PYTHONUNBUFFERED\"" > /etc/sudoers.d/boxgrinder
-/sbin/chmod 0440 /etc/sudoers.d/boxgrinder
+/bin/chmod 0440 /etc/sudoers.d/boxgrinder
 
 %preun
 rm -rf /etc/sudoers.d/boxgrinder
