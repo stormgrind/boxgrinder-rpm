@@ -6,7 +6,7 @@
 
 Summary: BoxGrinder Build files
 Name: rubygem-%{gemname}
-Version: 0.0.4
+Version: 0.0.6
 Release: 1%{?dist}
 Group: Development/Languages
 License: GPLv2+ or Ruby
@@ -14,7 +14,7 @@ URL: http://www.jboss.org/stormgrind/projects/boxgrinder.html
 Source0: http://rubygems.org/downloads/%{gemname}-%{version}.gem
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires: rubygems
-Requires: rubygem(boxgrinder-core) >= 0.0.2
+Requires: rubygem(boxgrinder-core) >= 0.0.4
 Requires: rubygem(aws-s3) >= 0.6.2
 Requires: rubygem(amazon-ec2) >= 0.9.6
 Requires: rubygem(net-sftp) >= 2.0.4

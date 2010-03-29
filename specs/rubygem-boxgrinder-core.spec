@@ -6,7 +6,7 @@
 
 Summary: BoxGrinder Core files
 Name: rubygem-%{gemname}
-Version: 0.0.3
+Version: 0.0.4
 Release: 1%{?dist}
 Group: Development/Languages
 License: GPLv2+ or Ruby
