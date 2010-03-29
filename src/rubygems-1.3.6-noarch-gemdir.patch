@@ -1,0 +1,13 @@
+--- rubygems-1.3.6/lib/rubygems/defaults.rb	2010-02-12 04:13:35.000000000 +0100
++++ rubygems-1.3.6/lib/rubygems/defaults.rb.work	2010-03-29 18:14:07.287153779 +0200
+@@ -25,8 +25,8 @@
+       File.join(ConfigMap[:libdir], ConfigMap[:ruby_install_name], 'gems',
+                 ConfigMap[:ruby_version])
+     else
+-      File.join(ConfigMap[:libdir], ruby_engine, 'gems',
+-                ConfigMap[:ruby_version])
++      gemdir = File::expand_path(File::join(ConfigMap[:sitedir],"..","gems")) 
++      File.join(gemdir, ConfigMap[:ruby_version])
+     end
+   end
+ 
