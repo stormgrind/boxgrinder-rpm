@@ -38,9 +38,9 @@ rm -Rf $RPM_BUILD_ROOT
 /bin/echo "### BoxGrinder vars, do not modify these lines! ###" >> /home/boxgrinder/.bashrc
 /bin/echo "export PATH=$PATH:/opt/%{name}/tools/apache-maven-%{maven_version}/bin:/usr/local/bin" >> /home/boxgrinder/.bashrc
 /bin/echo "export JAVA_HOME=/usr/lib/jvm/java-openjdk" >> /home/boxgrinder/.bashrc
-/bin/echo -e "boxgrinder    ALL=(ALL)       NOPASSWD: ALL\nDefaults:boxgrinder env_keep+=\"PYTHONUNBUFFERED\"" > /etc/sudoers.d/boxgrinder
 
-chmod 0440 /etc/sudoers.d/boxgrinder
+/bin/echo -e "boxgrinder    ALL=(ALL)       NOPASSWD: ALL\nDefaults:boxgrinder env_keep+=\"PYTHONUNBUFFERED\"" > /etc/sudoers.d/boxgrinder
+/sbin/chmod 0440 /etc/sudoers.d/boxgrinder
 
 %preun
 rm -rf /etc/sudoers.d/boxgrinder
