@@ -9,7 +9,7 @@ BuildArch:      noarch
 Group:          Applications/System
 Source0:        http://www.apache.org/dist/maven/binaries/apache-maven-2.2.1-bin.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-Requires:       shadow-utils
+Requires(pre):  shadow-utils, coreutils, sudo
 
 %description
 BoxGrinder environment. Required tools and source code for building appliances.
@@ -52,4 +52,3 @@ rm -rf /etc/sudoers.d/boxgrinder
 %changelog
 * Wed May 13 2009 Marek Goldmann 1.0.0.Beta2-1
 - Using sudoers.d/ directory
-
