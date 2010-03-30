@@ -9,7 +9,8 @@ BuildArch:      noarch
 Group:          Applications/System
 Source0:        http://www.apache.org/dist/maven/binaries/apache-maven-2.2.1-bin.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-Requires(pre):  shadow-utils, coreutils, sudo
+Requires(pre):  initscripts, shadow-utils, coreutils, sudo
+Requires:       git
 
 %description
 BoxGrinder environment. Required tools and source code for building appliances.

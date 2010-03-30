@@ -69,6 +69,9 @@ rm -rf $RPM_BUILD_ROOT
 %{ruby_sitelib}/*
 
 %changelog
+* Mon Mar 29 2010 Marek Goldmann <mgoldman@redhat.com> - 1.3.6-1
+- New upstream version
+
 * Wed Feb 25 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.3.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
 
