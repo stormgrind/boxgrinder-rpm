@@ -6,7 +6,7 @@
 
 Summary: BoxGrinder Build files
 Name: rubygem-%{gemname}
-Version: 0.0.7
+Version: 0.2.0
 Release: 1%{?dist}
 Group: Development/Languages
 License: GPLv2+ or Ruby
