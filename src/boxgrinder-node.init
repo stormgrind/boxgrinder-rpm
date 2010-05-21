@@ -1,0 +1,220 @@
+#!/bin/sh
+
+# chkconfig: 2345 93 25
+# description: Starts and stops the BoxGrinder Node service
+#
+# processname: java
+
+NAME=boxgrinder-node
+BG_NODE_CMD=$NAME
+BG_NODE_LOCK=/var/lock/subsys/$NAME
+BG_NODE_PID=/var/run/$NAME
+BG_NODE_LOG=/var/log/$NAME.log
+BG_NODE_USER=${BG_NODE_USER:-$NAME}
+BG_NODE_GROUP=${BG_NODE_GROUP:-$NAME}
+BG_NODE_TIMEOUT=30
+BG_NODE_TEMP_FILE=/tmp/$NAME-temp.file
+
+if [ -r /etc/rc.d/init.d/functions ]; then
+   . /etc/rc.d/init.d/functions
+fi
+
+if [ -r /etc/sysconfig/$NAME ]; then
+   . /etc/sysconfig/$NAME
+fi
+
+unset ISBOOT
+if [ ${NAME:0:1} = "S" -o ${NAME:0:1} = "K" ]
+then
+        NAME=${NAME:3}
+        ISBOOT=1
+fi
+
+if [ -x /sbin/runuser ]
+then
+	SU=runuser
+else
+	SU=su
+fi
+
+if [ "$BG_NODE_USER" = "RUNASIS" ]; then
+  SUBIT=""
+else
+  SUBIT="$SU - $BG_NODE_USER -s /bin/sh -c "
+fi
+
+function procrunning() {
+   procid=0
+   for procid in `pidof -x "java"`; do
+      ps -fwwwp $procid | grep 'boxgrinder-node$'> /dev/null && pid=$procid
+   done
+}
+
+start() {
+    echo -n $"Starting ${NAME}: "
+
+    if [ -f $BG_NODE_LOCK ]; then
+        procrunning
+        if [ ! $pid = '0' ]; then
+            if [ -r /etc/rc.d/init.d/functions ]; then
+                failure $"${NAME} startup"
+            fi
+	        return 2
+        fi
+    fi
+
+    if [ "$BG_NODE_USER" != "RUNASIS" ]; then
+        if [ -z "`id $BG_NODE_USER 2>/dev/null |grep uid`" ]; then
+            if [ -r /etc/rc.d/init.d/functions ]; then
+                failure $"${NAME} startup"
+            fi
+            echo -n -e "\nUser $BG_NODE_USER does not exist. Create user first."
+            return 2
+        fi
+        if [ -z "`grep "$BG_NODE_GROUP:" /etc/group`" ]; then
+            if [ -r /etc/rc.d/init.d/functions ]; then
+                failure $"${NAME} startup"
+            fi
+            echo -n -e "\nGroup $BG_NODE_GROUP does not exist. Create group first."
+            return 3
+        fi
+    fi
+
+    touch $BG_NODE_TEMP_FILE
+
+    $JRUBY_HOME/bin/jruby -I $BG_NODE_HOME/lib $BG_NODE_HOME/bin/$NAME > /dev/null 2>&1 &
+
+    sleep=0
+    RETVAL=1
+    while [ $sleep -lt $BG_NODE_TIMEOUT -a $RETVAL -eq 1 ]; do
+        sleep 5
+        sleep=`expr $sleep + 5`
+        # if server.log has been updated
+        if [ $BG_NODE_TEMP_FILE -ot $BG_NODE_LOG ]; then
+            grep -q 'BoxGrinder Node is started and waiting for tasks' $BG_NODE_LOG > /dev/null 2>&1
+            if [ $? -eq 0 ]; then
+                RETVAL=0
+            fi
+        fi
+        pid=0
+        procrunning
+        if [ $pid == '0' ]; then
+            RETVAL=2
+        fi
+    done
+
+    rm $BG_NODE_TEMP_FILE
+
+    if [ -f /etc/rc.d/init.d/functions ]; then
+        if [ $RETVAL -eq 0 ]; then
+            success $"${NAME} startup"
+        else
+            # check if the process is still running
+            pid=0
+            procrunning
+            if [ ! $pid = '0' ]; then
+                echo -n -e "\n${NAME} startup has timed out, process still running. \n"
+            else
+                failure $"${NAME} startup"
+            fi
+        fi
+    fi
+
+
+    [ $RETVAL = 0 ] && touch $BG_NODE_LOCK
+    pid=0
+    procrunning
+    if [ ! $pid = '0' ]; then
+        echo $pid > $BG_NODE_PID
+        if [ "$BG_NODE_USER" != "RUNASIS" ]; then
+            chown $BG_NODE_USER:$BG_NODE_GROUP $BG_NODE_PID
+        fi
+    fi
+    return $RETVAL
+}
+
+stop() {
+    echo -n $"Stopping ${NAME}: "
+    pid=0
+    procrunning
+    if [ $pid = '0' ]; then
+        if [ -r /etc/rc.d/init.d/functions ]; then
+            failure $"${NAME} shutdown"
+        fi
+        echo -n -e "\nNo BoxGrinder Node is currently running\n"
+        if [ -f $BG_NODE_LOCK ]; then
+            rm -f $BG_NODE_LOCK
+        fi
+        if [ -f $BG_NODE_PID ]; then
+            rm -f $BG_NODE_PID
+        fi
+        return 1
+    fi
+
+    pid=0
+    RETVAL=1
+    procrunning
+
+    # If process is still running
+
+    # First, try to kill it nicely
+    if [ $RETVAL != 0 ] ; then
+        for id in `ps --pid $pid | awk '{print $1}' | grep -v "^PID$"`; do
+           kill -s SIGTERM $id
+        done
+
+        sleep=0
+        while [ $sleep -lt $BG_NODE_TIMEOUT -a $RETVAL -eq 1 ]; do
+            sleep 2
+            sleep=`expr $sleep + 2`
+            pid=0
+            procrunning
+            if [ $pid == '0' ]; then
+                RETVAL=0
+            fi
+        done
+    fi
+
+    count=0
+    pid=0
+    procrunning
+
+    if [ $pid != '0' ] ; then
+        echo -e "\nTimeout: Shutdown command was sent, but process is still running with PID $pid"
+        if [ -r /etc/rc.d/init.d/functions ]; then
+            failure $"${NAME} shutdown"
+        fi
+    else
+        if [ -r /etc/rc.d/init.d/functions ]; then
+            success $"${NAME} shutdown"
+        fi
+     fi
+
+    [ $RETVAL -eq 0 ] && rm -f $BG_NODE_LOCK $BG_NODE_PID
+    return $RETVAL
+}
+
+case "$1" in
+start)
+    start
+    ;;
+stop)
+    stop
+    ;;
+restart|reload)
+    stop
+    sleep 3
+    start
+    ;;
+status)
+    status
+    ;;
+help)
+    echo "usage: ${NAME} (start|stop|status|restart|help)"
+    ;;
+*)
+    echo "usage: ${NAME} (start|stop|status|restart|help)"
+    exit 1
+esac
+
+exit $RETVAL

@@ -6,8 +6,8 @@
 
 Summary: BoxGrinder Core files
 Name: rubygem-%{gemname}
-Version: 0.0.4
-Release: 1%{?dist}
+Version: 0.0.8
+Release: 1
 Group: Development/Languages
 License: GPLv2+ or Ruby
 URL: http://www.jboss.org/stormgrind/projects/boxgrinder.html

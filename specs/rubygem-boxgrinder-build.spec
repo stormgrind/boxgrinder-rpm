@@ -6,20 +6,22 @@
 
 Summary: BoxGrinder Build files
 Name: rubygem-%{gemname}
-Version: 0.2.0
-Release: 1%{?dist}
+Version: 0.3.3
+Release: 1
 Group: Development/Languages
 License: GPLv2+ or Ruby
 URL: http://www.jboss.org/stormgrind/projects/boxgrinder.html
 Source0: http://rubygems.org/downloads/%{gemname}-%{version}.gem
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires: rubygems
-Requires: rubygem(boxgrinder-core) >= 0.0.4
+Requires: rubygem(boxgrinder-core) >= 0.0.8
 Requires: rubygem(aws-s3) >= 0.6.2
 Requires: rubygem(amazon-ec2) >= 0.9.6
 Requires: rubygem(net-sftp) >= 2.0.4
 Requires: rubygem(net-ssh) >= 2.0.20
 Requires: rubygem(rake) >= 0.8.7
+Requires: rubygem(progressbar) >= 0.9.0
+Requires: rubygem(commander) >= 4.0.3
 Requires: gcc, gcc-c++, make, rubygem-rake, wget, rpmdevtools, java-1.6.0-openjdk-devel, autoconf, expect, appliance-tools, sudo, libguestfs, ruby-libguestfs, guestfish, zlib-devel, SDL-devel, boxgrinder-environment, yum-utils, qemu-stable
 BuildRequires: rubygems
 BuildArch: noarch
@@ -43,7 +45,7 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-, root, root, -)
-%{_bindir}/boxgrinder
+%{_bindir}/boxgrinder-build
 %{gemdir}/gems/%{gemname}-%{version}/
 %doc %{gemdir}/doc/%{gemname}-%{version}
 %{gemdir}/cache/%{gemname}-%{version}.gem
