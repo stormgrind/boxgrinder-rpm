@@ -82,17 +82,19 @@ start() {
 
     touch $BG_NODE_TEMP_FILE
 
+    lines=`wc -l $BG_NODE_LOG | awk '{print $1}'`
+
     $JRUBY_HOME/bin/jruby -I $BG_NODE_HOME/lib $BG_NODE_HOME/bin/$NAME > /dev/null 2>&1 &
 
     sleep=0
     RETVAL=1
     while [ $sleep -lt $BG_NODE_TIMEOUT -a $RETVAL -eq 1 ]; do
-        sleep 5
-        sleep=`expr $sleep + 5`
-        # if server.log has been updated
+        sleep 3
+        sleep=`expr $sleep + 3`
         if [ $BG_NODE_TEMP_FILE -ot $BG_NODE_LOG ]; then
-            grep -q 'BoxGrinder Node is started and waiting for tasks' $BG_NODE_LOG > /dev/null 2>&1
-            if [ $? -eq 0 ]; then
+            current_lines=`wc -l $BG_NODE_LOG | awk '{print $1}'`
+            tail -n $(($current_lines-$lines)) $BG_NODE_LOG | grep -q 'BoxGrinder Node is started and waiting for tasks' > /dev/null 2>&1
+            if [ "$?" -eq 0 ]; then
                 RETVAL=0
             fi
         fi
@@ -130,6 +132,7 @@ start() {
             chown $BG_NODE_USER:$BG_NODE_GROUP $BG_NODE_PID
         fi
     fi
+    echo
     return $RETVAL
 }
 
@@ -160,7 +163,7 @@ stop() {
     # First, try to kill it nicely
     if [ $RETVAL != 0 ] ; then
         for id in `ps --pid $pid | awk '{print $1}' | grep -v "^PID$"`; do
-           kill -s SIGTERM $id
+           kill -15 $id
         done
 
         sleep=0
@@ -190,8 +193,30 @@ stop() {
         fi
      fi
 
+    echo
+
     [ $RETVAL -eq 0 ] && rm -f $BG_NODE_LOCK $BG_NODE_PID
     return $RETVAL
+}
+
+status() {
+    pid=0
+    procrunning
+    if [ $pid == 0 ]; then
+        if [ -f $BG_NODE_LOCK ]; then
+            echo "${NAME} is dead but subsys locked";
+            return 2
+        fi
+        if [ -f $BG_NODE_PID ]; then
+            echo "${NAME} is dead but pid file exists";
+            return 3
+        fi
+        echo "${NAME} is stopped";
+        return 0
+    else
+        echo "${NAME} (pid $pid) is running";
+        return 0
+    fi
 }
 
 case "$1" in
