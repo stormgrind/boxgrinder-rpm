@@ -15,6 +15,7 @@ Source2:        %{name}.init
 Source3:        http://repo.boxgrinder.org/boxgrinder/gems/torquebox-messaging-runtime-1.0.0.gem
 Source4:        http://repo.boxgrinder.org/boxgrinder/gems/torquebox-messaging-client-1.0.0.gem
 Source5:        http://repo.boxgrinder.org/boxgrinder/gems/torquebox-messaging-container-1.0.0.gem
+Requires:       java-1.6.0-openjdk
 Requires:       shadow-utils
 Requires:       coreutils
 Requires:       initscripts
